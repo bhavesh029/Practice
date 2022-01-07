@@ -10,11 +10,11 @@
     <form onsubmit="userDetails(event)">
         <h2>Login Form</h2>
         <label for="username">UserName</label><br>
-        <input type="text" required name="username"><br>
+        <input type="text" required name="username" id="username"><br>
         <label>Phone Number</label><br>
-        <input type="number" name="number" required><br>
+        <input type="number" name="number" required id="number"><br>
         <label for="email">Email</label><br>
-        <input type="email" name="email" required><br>
+        <input type="email" name="email" required id="email"><br>
         <button>Submit</button>
     </form>
     <ul id="userList"></ul>
@@ -33,10 +33,53 @@
             localStorage.setItem(obj.email, JSON.stringify(obj));
             showUser(obj);
         }
+        window.addEventListener("DOMContentLoaded" ,() => {
+            const localStorageObj = localStorage;
+            const localStorageKeys = Object.keys(localStorageObj);
+
+            for(var i=0;i<localStorageKeys.length;i++){
+                const key = localStorageKeys[i];
+                const userDetails = localStorageObj[key];
+                const userDetailsObj = JSON.parse(userDetails);
+                showUser(userDetailsObj);
+            }
+        })
         function showUser(user){
+            if(localStorage.getItem(user.email) != null){
+                removeUserFromScreen(user.email);
+            }
+            document.getElementById('email').value = '';
+            document.getElementById('username').value = '';
+            document.getElementById('number').value = '';
             const parentNode = document.getElementById('userList');
-            const childHTML = `<li> ${user.name} - ${user.email} </li>`
+            const childHTML = `<li id = ${user.email}> ${user.name} - ${user.email}
+                        <button onclick=deleteUser('${user.email}')> Delete </button>
+                        <button onclick=editUser('${user.email}','${user.name}','${user.number}')> Edit </button>
+                </li>`
             parentNode.innerHTML = parentNode.innerHTML + childHTML;
+        }
+
+        
+        function editUser(emailId,name,number){
+            document.getElementById('email').value = emailId;
+            document.getElementById('username').value = name;
+            document.getElementById('number').value = number;
+            deleteUser(emailId);
+        }
+
+
+        function deleteUser(emailId){
+            console.log(emailId);
+            localStorage.removeItem(emailId);
+            removeUserFromScreen(emailId);
+        }
+        function removeUserFromScreen(emailId){
+            const parentNode = document.getElementById('userList');
+            const childNodeToBeDeleted = document.getElementById(emailId);
+            if(childNodeToBeDeleted){
+                parentNode.removeChild(childNodeToBeDeleted);
+            }
+          
         }
         
         
