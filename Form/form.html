@@ -19,12 +19,19 @@
     <script>
         function addUser(event){
             event.preventDefault();
-            const name = event.target.username.value;
-            const number = event.target.number.value;
-            localStorage.setItem('name',name);
-            localStorage.setItem('number',number);
-
-}
+             const name = event.target.username.value;
+             const number = event.target.number.value;
+            // localStorage.setItem('name',name);
+            // localStorage.setItem('number',number);
+            const obj ={
+            name,
+            number
+            };
+           // let obj_serilized = JSON.stringify(obj);
+            localStorage.setItem = ('userDetails',JSON.stringify(obj));
+        }
+      
+        
     </script>
 </body>
 </html>
