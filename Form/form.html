@@ -18,7 +18,12 @@
         <button>Submit</button>
     </form>
     <ul id="userList"></ul>
-
+    <!-- Backend Call -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.min.js" 
+     integrity="sha512-/Q6t3CASm04EliI1QyIDAA/nDo9R8FQ/BULoUFyN4n/BDdyIxeH7u++Z+eobdmr11gG5D/6nPFyDlnisDwhpYA==" 
+     crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
+    <!-- JavaScript Code -->
     <script>
         function userDetails(event){
             event.preventDefault();
@@ -30,8 +35,17 @@
             number,
             email
             };
-            localStorage.setItem(obj.email, JSON.stringify(obj));
-            showUser(obj);
+            axios.post("https://crudcrud.com/api/c273dbdfc71c4a85ac9de718d37d4e36/appointmentData",obj)
+                .then((response) => {
+                    showUser(response.data);
+                    //console.log(response);
+                })
+                .catch((err) => {
+                    document.body.innerHTML = document.body.innerHTML + "<h4> Something went Wrong </h4>"
+                    console.log(err);
+                })
+            //localStorage.setItem(obj.email, JSON.stringify(obj));
+            //showUser(obj);
         }
         window.addEventListener("DOMContentLoaded" ,() => {
             const localStorageObj = localStorage;
