@@ -48,15 +48,17 @@
             //showUser(obj);
         }
         window.addEventListener("DOMContentLoaded" ,() => {
-            const localStorageObj = localStorage;
-            const localStorageKeys = Object.keys(localStorageObj);
+            axios.get("https://crudcrud.com/api/c273dbdfc71c4a85ac9de718d37d4e36/appointmentData")
+                .then((response) => {
+                    console.log(response);
 
-            for(var i=0;i<localStorageKeys.length;i++){
-                const key = localStorageKeys[i];
-                const userDetails = localStorageObj[key];
-                const userDetailsObj = JSON.parse(userDetails);
-                showUser(userDetailsObj);
-            }
+                    for(var i =0;i<response.data.length;i++){
+                        showUser(response.data[i]);     
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
         })
         function showUser(user){
             if(localStorage.getItem(user.email) != null){
