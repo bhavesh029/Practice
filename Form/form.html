@@ -61,16 +61,19 @@
                 })
         })
         function showUser(user){
-            if(localStorage.getItem(user.email) != null){
-                removeUserFromScreen(user.email);
-            }
+        
             document.getElementById('email').value = '';
             document.getElementById('username').value = '';
             document.getElementById('number').value = '';
+
+            if(localStorage.getItem(user.email) != null){
+                removeUserFromScreen(user.email);
+            }
+
             const parentNode = document.getElementById('userList');
-            const childHTML = `<li id = ${user.email}> ${user.name} - ${user.email}
-                        <button onclick=deleteUser('${user.email}')> Delete </button>
-                        <button onclick=editUser('${user.email}','${user.name}','${user.number}')> Edit </button>
+            const childHTML = `<li id = ${user._id}> ${user.name} - ${user.email}
+                        <button onclick=deleteUser('${user._id}')> Delete </button>
+                        <button onclick=editUser('${user._id}','${user.name}','${user.number}')> Edit </button>
                 </li>`
             parentNode.innerHTML = parentNode.innerHTML + childHTML;
         }
@@ -84,14 +87,21 @@
         }
 
 
-        function deleteUser(emailId){
-            console.log(emailId);
-            localStorage.removeItem(emailId);
-            removeUserFromScreen(emailId);
+        function deleteUser(userId){
+            axios.delete(`https://crudcrud.com/api/c273dbdfc71c4a85ac9de718d37d4e36/appointmentData/${userId}`)
+                .then((response) => {
+                    removeUserFromScreen(userId)
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+            // console.log(emailId);
+            // localStorage.removeItem(emailId);
+            //removeUserFromScreen(userId);
         }
-        function removeUserFromScreen(emailId){
+        function removeUserFromScreen(userId){
             const parentNode = document.getElementById('userList');
-            const childNodeToBeDeleted = document.getElementById(emailId);
+            const childNodeToBeDeleted = document.getElementById(userId);
             if(childNodeToBeDeleted){
                 parentNode.removeChild(childNodeToBeDeleted);
             }
